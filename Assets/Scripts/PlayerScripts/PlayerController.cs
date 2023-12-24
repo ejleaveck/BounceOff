@@ -48,7 +48,10 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         fuelControl = GetComponent<FuelControl>();
         rotationController = GetComponent<PlayerRotationController>();
-        tractorBeamController = GetComponent<TractorBeamController>();
+       tractorBeamController = GetComponentInChildren<TractorBeamController>();
+
+        tractorBeamController.SetFuelControl(fuelControl);
+
 
         //Initialize Player status
         fuelControl.StartRefuel();
@@ -90,7 +93,15 @@ public class PlayerController : MonoBehaviour
         // Jump = Y button
         if (Input.GetButton("Jump"))
         {
-            tractorBeamController.IsTractorBeamOn = true;
+            tractorBeamController.SetTractorBeamState(true);
+
+            //tractorBeamController.IsTractorBeamOn = true;
+        }
+        else
+        {
+            tractorBeamController.SetTractorBeamState(false);
+
+            //tractorBeamController.IsTractorBeamOn = false;
         }
 
     }

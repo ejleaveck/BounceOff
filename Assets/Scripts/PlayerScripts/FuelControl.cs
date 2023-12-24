@@ -6,7 +6,7 @@ public class FuelControl : MonoBehaviour
 
     [SerializeField] private float maxFuelLevel = 3f;
     [SerializeField] private float refuelTime = 2f;
-    private float currentFuelLevel;
+    [SerializeField] private float currentFuelLevel;
     private bool isRefueling;
 
     public float CurrentFuelLevel

@@ -4,34 +4,40 @@ using UnityEngine;
 
 public class GoalController : MonoBehaviour
 {
-
     [SerializeField] private float gravityStrength = 10f;
-    private Transform goalCenter;
-    private Rigidbody2D goalObjectRb;
+    [SerializeField] private float maxGravityForce = 10f;
+    [SerializeField] private float dampingDistance = 1f; // Distance within which damping starts
+    [SerializeField] private float dampingFactor = 0.5f; // Damping factor for reducing velocity
 
-    // Start is called before the first frame update
+    private Transform goalCenter;
+
     void Start()
     {
-        goalCenter = transform;
+        goalCenter = transform; // Assuming the goal's center is at its own transform position
     }
 
-
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if(other.gameObject.CompareTag("GoalObject"))
+        if (other.gameObject.CompareTag("GoalObject"))
         {
-            if (goalObjectRb == null)
-            {
-                goalObjectRb = other.GetComponent<Rigidbody2D>();
-            }
+            Rigidbody2D goalObjectRb = other.GetComponent<Rigidbody2D>();
 
             Vector2 directionToCenter = (Vector2)goalCenter.position - goalObjectRb.position;
             float distance = directionToCenter.magnitude;
 
-            Vector2 forceDirection = directionToCenter.normalized;
-            float gravityForce = gravityStrength / distance;
-            goalObjectRb.AddForce(forceDirection * gravityForce, ForceMode2D.Force);
+            // Apply gravitational force if the goal object is outside the damping distance
+            if (distance > dampingDistance)
+            {
+                Vector2 forceDirection = directionToCenter.normalized;
+                float gravityForce = Mathf.Min(gravityStrength / Mathf.Max(distance, 1f), maxGravityForce);
+                goalObjectRb.AddForce(forceDirection * gravityForce, ForceMode2D.Force);
+            }
+
+            // Damping the velocity as the object gets closer to the center
+            if (distance < dampingDistance)
+            {
+                goalObjectRb.velocity = Vector2.Lerp(goalObjectRb.velocity, Vector2.zero, dampingFactor * Time.deltaTime);
+            }
         }
     }
-
 }
