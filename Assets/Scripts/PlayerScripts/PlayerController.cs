@@ -3,33 +3,107 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    [SerializeField] private float moveForce = 10f;
-    [SerializeField] private float dragFactor = .95f;
-    [SerializeField] private float moveMultiplier = 2f;
+    #region
+    //Status and Flags
 
 
-    private Rigidbody2D playerRb;
-    private Vector2 moveDirection;
-    private Vector2 initialTouchPosition;
-    private bool isTouching = false;
+    // Move
+    [SerializeField] private float moveSpeed = 50f;
+    [SerializeField] private float dragFactor = .85f;
+    private Vector2 inputDirection;
+    private Vector2 moveAmount;
+
+    //Move Flags
+    bool canMove = false;
+
+    //Special Movements
+    private PlayerRotationController rotationController;
+    private TractorBeamController tractorBeamController;
+
+    //Power Ups
+    //***
+    //Fuel Control
+    private FuelControl fuelControl;
+
+    //***
+    //Pulse
+    bool isPulseFiring = false;
+    bool isPulseAvailable = true;
+
+    [SerializeField] private float pulseMultiplier = 5f;
+    [SerializeField] private float pulseBurnRate = 2f;
+
+    //Game Objects
+    Rigidbody2D playerRb;
+    SpriteRenderer spriteRenderer;
+
+    #endregion
 
 
 
-    // Start is called before the first frame update
     void Start()
     {
+        //Initialize Game Components
         playerRb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        fuelControl = GetComponent<FuelControl>();
+        rotationController = GetComponent<PlayerRotationController>();
+        tractorBeamController = GetComponent<TractorBeamController>();
+
+        //Initialize Player status
+        fuelControl.StartRefuel();
+
+
+        //Initialzie Environment
     }
 
-    // Update is called once per frame
+
+
     void Update()
     {
-        HandleTouchInput();
+        //movement input
+        CheckMoveAvailability();
+        if (canMove)
+        {
+            inputDirection.x = Input.GetAxis("Horizontal");
+            inputDirection.y = Input.GetAxis("Vertical");
+            inputDirection.Normalize();
+        }
+
+        //pulse engine input ---- special skill input
+        //Fire3 = X button
+        isPulseFiring = Input.GetButton("Fire3");
+
+
+        //Rotation input
+        //Fire1 = A button  -- Fire2 = B button
+        if (Input.GetButtonDown("Fire1"))
+        {
+            rotationController.TryRotatePlayer(1);
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            rotationController.TryRotatePlayer(-1);
+        }
+
+        //Input button testing
+        // Jump = Y button
+        if (Input.GetButton("Jump"))
+        {
+            tractorBeamController.IsTractorBeamOn = true;
+        }
+
     }
+
 
     private void FixedUpdate()
     {
-        if (isTouching)
+
+        //incorpate a check in fuelcontrol script.
+        fuelControl.StartRefuel();
+
+
+        if (inputDirection != Vector2.zero)
         {
             ApplyMovement();
         }
@@ -37,49 +111,39 @@ public class PlayerController : MonoBehaviour
         {
             GradualStop();
         }
-
     }
 
-    void HandleTouchInput()
+
+    void CheckMoveAvailability()
     {
-        if(Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    initialTouchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                    break;
-
-                case TouchPhase.Moved:
-                case TouchPhase.Stationary:
-                    Vector2 currentTouchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                    moveDirection = (currentTouchPosition - initialTouchPosition).normalized;
-                    initialTouchPosition = currentTouchPosition;
-                    isTouching = true;
-                    break;
-
-                case TouchPhase.Ended:
-                    isTouching=false;
-                    break;
-            }
-        }
-        else
-        {
-            isTouching = false;
-        }
+        canMove = true;
     }
 
     void ApplyMovement()
     {
-        Vector2 force = moveDirection * moveForce * moveMultiplier;
-        playerRb.AddForce(force);
+        moveAmount = inputDirection * moveSpeed * Time.deltaTime;
+
+        FirePulseEngine();
+
+        Vector2 newPosition = playerRb.position + moveAmount;
+        playerRb.MovePosition(newPosition);
     }
 
     void GradualStop()
     {
         playerRb.velocity *= dragFactor;
+    }
+
+
+    void FirePulseEngine()
+    {
+        if (isPulseFiring && isPulseAvailable && fuelControl.CurrentFuelLevel > 0)
+        {
+            fuelControl.ConsumeFuel(pulseBurnRate * Time.deltaTime);
+
+            moveAmount *= pulseMultiplier;
+        }
+
     }
 
 }

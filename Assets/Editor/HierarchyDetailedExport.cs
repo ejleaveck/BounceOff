@@ -7,7 +7,7 @@ using System.Linq;
 
 public class DetailedHierarchyExporter
 {
-    [MenuItem("EJ's Tools/Export Detailed Hierarchy to Text")]
+    [MenuItem("EJ's Tools/Export Hierarchy")]
     public static void ExportHierarchy()
     {
         StringBuilder stringBuilder = new StringBuilder();
@@ -21,7 +21,7 @@ public class DetailedHierarchyExporter
         }
 
         string date = DateTime.Now.ToString("yyyy_MM_dd");
-        string defaultName = "Detailed_Hierarchy_Export_" + date + ".txt";
+        string defaultName = "Hierarchy_Export.txt";
         string filePath = EditorUtility.SaveFilePanel("Save Detailed Hierarchy", "", defaultName, "txt");
 
         if (!string.IsNullOrEmpty(filePath))
