@@ -3,7 +3,6 @@ using UnityEngine;
 public class PulseEngineController : MonoBehaviour
 {
 
-    private float pulseMultiplier;
     private float pulseOffMultiplierDefault = 1f;
     [SerializeField] private float pulseOnMultiplierDefault = 4f;
 
@@ -12,26 +11,17 @@ public class PulseEngineController : MonoBehaviour
 
     private FuelController fuelControl;
 
-
-    //Based on environmental effects, NOT Fuel rate
-    private bool isPulseAvailable;
-
-
     /// <summary>
     /// Set according to environmental effects.
     /// NOT used for fuel level
     /// </summary>
-    public bool IsPulseAvailable
-    {
-        get { return isPulseAvailable; }
-        set { isPulseAvailable = value; }
-    }
+    public bool IsPulseAvailable { get; set; }
 
-    public float PulseMultiplier
-    {
-        get { return pulseMultiplier; }
-        private set { pulseMultiplier = value; }
-    }
+
+    /// <summary>
+    /// Use to access current Pulse Speed boost based on game factors.
+    /// </summary>
+    public float PulseMultiplier { get; set; }
 
     // Start is called before the first frame update
     void Awake()
@@ -39,37 +29,25 @@ public class PulseEngineController : MonoBehaviour
         fuelControl = GetComponent<FuelController>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (isPulseOn && isPulseAvailable && fuelControl.CurrentFuelLevel > 0)
+        if (isPulseOn && IsPulseAvailable && fuelControl.CurrentFuelLevel > 0f)
         {
             fuelControl.ConsumeFuel(pulseBurnRate);
             PulseMultiplier = pulseOnMultiplierDefault;
         }
         else
         {
-            isPulseOn = false;
+            SetPulseEngineState(false);
             PulseMultiplier = pulseOffMultiplierDefault;
 
         }
     }
 
-    /// <summary>
-    /// Decrements Fuel when fired.
-    /// C
-    /// </summary>
-    /// <param name="tryTurningOn"></param>
-    /// <returns></returns>
-    public void SetPulseEngineState(bool tryTurningOn)
+
+    public void SetPulseEngineState(bool isActive)
     {
-        if (tryTurningOn)
-        {
-            isPulseOn = true;
-        }
-        else
-        {
-            isPulseOn = false;
-        }
+        isPulseOn = isActive;
     }
 
 

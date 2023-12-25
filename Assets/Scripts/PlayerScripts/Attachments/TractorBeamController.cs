@@ -13,28 +13,17 @@ public class TractorBeamController : MonoBehaviour
     Rigidbody2D goalObjectRb;
     private SpriteRenderer tractorBeamRenderer;
 
-    //Beam variables
-    private bool isTractorBeamOn;
-    private bool isTractorBeamAvailable;
-
     //Fuel control 
     private FuelController fuelControl;
-    [SerializeField] private float beamBurnRate = .5f;
+    [SerializeField] private float beamBurnRate = 1f;
 
     /// <summary>
     /// Set based on environmentals or status, not fuel levels.
     /// </summary>
-    public bool IsTractorBeamAvailable
-    {
-        get { return isTractorBeamAvailable; }
-        set { isTractorBeamAvailable = value; }
-    }
+    public bool IsTractorBeamAvailable { get; set; }
 
-    public bool IsTractorBeamOn
-    {
-        get { return isTractorBeamOn; }
-        set { isTractorBeamOn = value; }
-    }
+    private bool isTractorBeamOn;
+    private bool isTractorBeamButtonPressed;
 
 
     // Start is called before the first frame update
@@ -45,38 +34,54 @@ public class TractorBeamController : MonoBehaviour
 
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (isTractorBeamOn && isTractorBeamAvailable && fuelControl.CurrentFuelLevel > 0)
+
+        if (isTractorBeamOn)
         {
             fuelControl.ConsumeFuel(beamBurnRate);
         }
         else
         {
-            SetTractorBeamState(false);
+            fuelControl.StopConsumingFuel();
         }
     }
 
-    public void SetTractorBeamState(bool isActive)
+    public void SetTractorBeamButtonState(bool isPressed)
     {
-        IsTractorBeamOn = isActive;
-        tractorBeamRenderer.enabled = isActive;
+        isTractorBeamButtonPressed = isPressed;
+        UpdateTractorBeamState();
+    }
+
+    private void UpdateTractorBeamState()
+    {
+        if (isTractorBeamButtonPressed && IsTractorBeamAvailable && !fuelControl.IsFuelTankEmpty)
+        {
+            isTractorBeamOn = true;
+            tractorBeamRenderer.enabled = true;
+        }
+        else
+        {
+            isTractorBeamOn = false;
+            tractorBeamRenderer.enabled = false;
+        }
+
     }
 
     /// <summary>
     /// Receives Fuel Control from Player Object.
     /// Since this is a child object
     /// </summary>
-    /// <param name="control">the Controller that has the Fuel Controller attached.</param>
+    /// <param name="control">Get's the Fuel Controller from the Game Object it is attached to.</param>
     public void SetFuelControl(FuelController control)
     {
         fuelControl = control;
     }
 
-
+    //TODO: separate phyiscs, use empty tank threshold.
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (isTractorBeamOn && other.gameObject.layer == LayerMask.NameToLayer("TractorBeamable"))
+        if (isTractorBeamOn && other.gameObject.layer == LayerMask.NameToLayer("TractorBeamable") && fuelControl.CurrentFuelLevel > 0)
         {
             goalObjectRb = other.GetComponent<Rigidbody2D>();
 
@@ -96,9 +101,7 @@ public class TractorBeamController : MonoBehaviour
             {
                 goalObjectRb.velocity = Vector2.Lerp(goalObjectRb.velocity, Vector2.zero, dampingFactor * Time.deltaTime);
             }
-
         }
-
     }
 
 }

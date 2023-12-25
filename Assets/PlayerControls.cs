@@ -37,7 +37,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ControllerAButton"",
+                    ""name"": ""EnginePulseButton"",
                     ""type"": ""Button"",
                     ""id"": ""87a4a409-9571-47c9-a23c-9c0f4fac9396"",
                     ""expectedControlType"": ""Button"",
@@ -46,7 +46,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ControllerBButton"",
+                    ""name"": ""RotateCounterclockwise"",
                     ""type"": ""Button"",
                     ""id"": ""6cc656bd-04a1-498e-8b9d-f2caea80d983"",
                     ""expectedControlType"": ""Button"",
@@ -55,18 +55,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ControllerXButton"",
+                    ""name"": ""RotateClockwise"",
                     ""type"": ""Button"",
-                    ""id"": ""b9fc565f-af43-4d60-9d59-4f29afd2f7f6"",
+                    ""id"": ""c8d1dba4-e112-4431-8118-24a2e0a4c7bd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ControllerYButton"",
+                    ""name"": ""UseAttachmentButton"",
                     ""type"": ""Button"",
-                    ""id"": ""c8d1dba4-e112-4431-8118-24a2e0a4c7bd"",
+                    ""id"": ""b9fc565f-af43-4d60-9d59-4f29afd2f7f6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -202,18 +202,51 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ControllerAButton"",
+                    ""action"": ""EnginePulseButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""b91a078f-fc89-40e3-9568-a49f29df3498"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCounterclockwise"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0c61879-0c55-4e06-87fc-4b1d6bfd4788"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCounterclockwise"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5003fea3-3db5-45ca-ae27-82d35366ff91"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ControllerBButton"",
+                    ""action"": ""RotateClockwise"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28018f1d-67c7-409f-a6b7-7ff9ebebae8c"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateClockwise"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -224,18 +257,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ControllerXButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5003fea3-3db5-45ca-ae27-82d35366ff91"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ControllerYButton"",
+                    ""action"": ""UseAttachmentButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -247,10 +269,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_MovePlayer = m_Player.FindAction("MovePlayer", throwIfNotFound: true);
-        m_Player_ControllerAButton = m_Player.FindAction("ControllerAButton", throwIfNotFound: true);
-        m_Player_ControllerBButton = m_Player.FindAction("ControllerBButton", throwIfNotFound: true);
-        m_Player_ControllerXButton = m_Player.FindAction("ControllerXButton", throwIfNotFound: true);
-        m_Player_ControllerYButton = m_Player.FindAction("ControllerYButton", throwIfNotFound: true);
+        m_Player_EnginePulseButton = m_Player.FindAction("EnginePulseButton", throwIfNotFound: true);
+        m_Player_RotateCounterclockwise = m_Player.FindAction("RotateCounterclockwise", throwIfNotFound: true);
+        m_Player_RotateClockwise = m_Player.FindAction("RotateClockwise", throwIfNotFound: true);
+        m_Player_UseAttachmentButton = m_Player.FindAction("UseAttachmentButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -313,19 +335,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_MovePlayer;
-    private readonly InputAction m_Player_ControllerAButton;
-    private readonly InputAction m_Player_ControllerBButton;
-    private readonly InputAction m_Player_ControllerXButton;
-    private readonly InputAction m_Player_ControllerYButton;
+    private readonly InputAction m_Player_EnginePulseButton;
+    private readonly InputAction m_Player_RotateCounterclockwise;
+    private readonly InputAction m_Player_RotateClockwise;
+    private readonly InputAction m_Player_UseAttachmentButton;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @MovePlayer => m_Wrapper.m_Player_MovePlayer;
-        public InputAction @ControllerAButton => m_Wrapper.m_Player_ControllerAButton;
-        public InputAction @ControllerBButton => m_Wrapper.m_Player_ControllerBButton;
-        public InputAction @ControllerXButton => m_Wrapper.m_Player_ControllerXButton;
-        public InputAction @ControllerYButton => m_Wrapper.m_Player_ControllerYButton;
+        public InputAction @EnginePulseButton => m_Wrapper.m_Player_EnginePulseButton;
+        public InputAction @RotateCounterclockwise => m_Wrapper.m_Player_RotateCounterclockwise;
+        public InputAction @RotateClockwise => m_Wrapper.m_Player_RotateClockwise;
+        public InputAction @UseAttachmentButton => m_Wrapper.m_Player_UseAttachmentButton;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -338,18 +360,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MovePlayer.started += instance.OnMovePlayer;
             @MovePlayer.performed += instance.OnMovePlayer;
             @MovePlayer.canceled += instance.OnMovePlayer;
-            @ControllerAButton.started += instance.OnControllerAButton;
-            @ControllerAButton.performed += instance.OnControllerAButton;
-            @ControllerAButton.canceled += instance.OnControllerAButton;
-            @ControllerBButton.started += instance.OnControllerBButton;
-            @ControllerBButton.performed += instance.OnControllerBButton;
-            @ControllerBButton.canceled += instance.OnControllerBButton;
-            @ControllerXButton.started += instance.OnControllerXButton;
-            @ControllerXButton.performed += instance.OnControllerXButton;
-            @ControllerXButton.canceled += instance.OnControllerXButton;
-            @ControllerYButton.started += instance.OnControllerYButton;
-            @ControllerYButton.performed += instance.OnControllerYButton;
-            @ControllerYButton.canceled += instance.OnControllerYButton;
+            @EnginePulseButton.started += instance.OnEnginePulseButton;
+            @EnginePulseButton.performed += instance.OnEnginePulseButton;
+            @EnginePulseButton.canceled += instance.OnEnginePulseButton;
+            @RotateCounterclockwise.started += instance.OnRotateCounterclockwise;
+            @RotateCounterclockwise.performed += instance.OnRotateCounterclockwise;
+            @RotateCounterclockwise.canceled += instance.OnRotateCounterclockwise;
+            @RotateClockwise.started += instance.OnRotateClockwise;
+            @RotateClockwise.performed += instance.OnRotateClockwise;
+            @RotateClockwise.canceled += instance.OnRotateClockwise;
+            @UseAttachmentButton.started += instance.OnUseAttachmentButton;
+            @UseAttachmentButton.performed += instance.OnUseAttachmentButton;
+            @UseAttachmentButton.canceled += instance.OnUseAttachmentButton;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -357,18 +379,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MovePlayer.started -= instance.OnMovePlayer;
             @MovePlayer.performed -= instance.OnMovePlayer;
             @MovePlayer.canceled -= instance.OnMovePlayer;
-            @ControllerAButton.started -= instance.OnControllerAButton;
-            @ControllerAButton.performed -= instance.OnControllerAButton;
-            @ControllerAButton.canceled -= instance.OnControllerAButton;
-            @ControllerBButton.started -= instance.OnControllerBButton;
-            @ControllerBButton.performed -= instance.OnControllerBButton;
-            @ControllerBButton.canceled -= instance.OnControllerBButton;
-            @ControllerXButton.started -= instance.OnControllerXButton;
-            @ControllerXButton.performed -= instance.OnControllerXButton;
-            @ControllerXButton.canceled -= instance.OnControllerXButton;
-            @ControllerYButton.started -= instance.OnControllerYButton;
-            @ControllerYButton.performed -= instance.OnControllerYButton;
-            @ControllerYButton.canceled -= instance.OnControllerYButton;
+            @EnginePulseButton.started -= instance.OnEnginePulseButton;
+            @EnginePulseButton.performed -= instance.OnEnginePulseButton;
+            @EnginePulseButton.canceled -= instance.OnEnginePulseButton;
+            @RotateCounterclockwise.started -= instance.OnRotateCounterclockwise;
+            @RotateCounterclockwise.performed -= instance.OnRotateCounterclockwise;
+            @RotateCounterclockwise.canceled -= instance.OnRotateCounterclockwise;
+            @RotateClockwise.started -= instance.OnRotateClockwise;
+            @RotateClockwise.performed -= instance.OnRotateClockwise;
+            @RotateClockwise.canceled -= instance.OnRotateClockwise;
+            @UseAttachmentButton.started -= instance.OnUseAttachmentButton;
+            @UseAttachmentButton.performed -= instance.OnUseAttachmentButton;
+            @UseAttachmentButton.canceled -= instance.OnUseAttachmentButton;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -389,9 +411,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMovePlayer(InputAction.CallbackContext context);
-        void OnControllerAButton(InputAction.CallbackContext context);
-        void OnControllerBButton(InputAction.CallbackContext context);
-        void OnControllerXButton(InputAction.CallbackContext context);
-        void OnControllerYButton(InputAction.CallbackContext context);
+        void OnEnginePulseButton(InputAction.CallbackContext context);
+        void OnRotateCounterclockwise(InputAction.CallbackContext context);
+        void OnRotateClockwise(InputAction.CallbackContext context);
+        void OnUseAttachmentButton(InputAction.CallbackContext context);
     }
 }

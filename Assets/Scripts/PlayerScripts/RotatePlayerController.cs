@@ -1,35 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RotatePlayerController : MonoBehaviour
 {
 
-    [SerializeField] private float rotationAmount = 22.5f;
-    private bool canRotate = true;
+    [SerializeField] private float rotationAmount = 45f;
+    [SerializeField] private float continousRotationSpeed = 400f;
 
-    
+    /// <summary>
+    /// Set as a user preference, not necessarily a game mechanic.
+    /// </summary>
+    public bool IsRotatingContinously { get; set; }
+
+    private float currentRotationDirection;
+
+    private Rigidbody2D playerRb;
+
     /// <summary>
     /// Used for environmental effects control
     /// </summary>
-    public bool CanRotate
+    public bool CanRotate { get; set; }
+
+    private void Awake()
     {
-        get { return canRotate; }
-        set { canRotate = value; }
+        playerRb = GetComponent<Rigidbody2D>();
+        playerRb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
     }
 
-  
     public void TryRotatePlayer(float direction)
     {
-        if (canRotate)
+        currentRotationDirection = direction;
+
+        if (!IsRotatingContinously && CanRotate)
         {
-           RotatePlayer(direction);
+            transform.Rotate(0, 0, rotationAmount * direction);
         }
     }
 
-    private void RotatePlayer(float direction)
+    private void FixedUpdate()
     {
-        transform.Rotate(0, 0, rotationAmount * direction);
+        if (IsRotatingContinously && currentRotationDirection != 0 && CanRotate)
+        {
+            playerRb.constraints = RigidbodyConstraints2D.None;
+
+            ContinousRotation();
+        }
+    }
+
+
+    public void StopContinuousRotation()
+    {
+        if (IsRotatingContinously)
+        {
+            currentRotationDirection = 0;
+            playerRb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+    }
+
+    private void ContinousRotation()
+    {
+        float rotationThisFrame = continousRotationSpeed * currentRotationDirection * Time.deltaTime;
+
+        playerRb.MoveRotation(playerRb.rotation + rotationThisFrame);
     }
 
 }

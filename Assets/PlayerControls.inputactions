@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ControllerAButton",
+                    "name": "EnginePulseButton",
                     "type": "Button",
                     "id": "87a4a409-9571-47c9-a23c-9c0f4fac9396",
                     "expectedControlType": "Button",
@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ControllerBButton",
+                    "name": "RotateCounterclockwise",
                     "type": "Button",
                     "id": "6cc656bd-04a1-498e-8b9d-f2caea80d983",
                     "expectedControlType": "Button",
@@ -33,18 +33,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ControllerXButton",
+                    "name": "RotateClockwise",
                     "type": "Button",
-                    "id": "b9fc565f-af43-4d60-9d59-4f29afd2f7f6",
+                    "id": "c8d1dba4-e112-4431-8118-24a2e0a4c7bd",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ControllerYButton",
+                    "name": "UseAttachmentButton",
                     "type": "Button",
-                    "id": "c8d1dba4-e112-4431-8118-24a2e0a4c7bd",
+                    "id": "b9fc565f-af43-4d60-9d59-4f29afd2f7f6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -180,18 +180,51 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ControllerAButton",
+                    "action": "EnginePulseButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "b91a078f-fc89-40e3-9568-a49f29df3498",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateCounterclockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0c61879-0c55-4e06-87fc-4b1d6bfd4788",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateCounterclockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5003fea3-3db5-45ca-ae27-82d35366ff91",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ControllerBButton",
+                    "action": "RotateClockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28018f1d-67c7-409f-a6b7-7ff9ebebae8c",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateClockwise",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -202,18 +235,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ControllerXButton",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5003fea3-3db5-45ca-ae27-82d35366ff91",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ControllerYButton",
+                    "action": "UseAttachmentButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

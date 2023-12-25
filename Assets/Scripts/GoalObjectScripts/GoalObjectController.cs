@@ -6,17 +6,20 @@ public class GoalObjectController : MonoBehaviour
 {
 
     Rigidbody2D goalObjectRb;
+
     [SerializeField] private Vector2 initialForce;
 
     [SerializeField] private float maxSpeed = 30f;
     [SerializeField] private float minSpeed = 10f;
 
 
+    private void Awake()
+    {
+        goalObjectRb = GetComponent<Rigidbody2D>();
+    }
     // Start is called before the first frame update
     void Start()
     {
-        goalObjectRb = GetComponent<Rigidbody2D>();
-
         ApplyInitialForce();
     }
 
@@ -24,6 +27,7 @@ public class GoalObjectController : MonoBehaviour
     private void FixedUpdate()
     {
         ControlSpeed();
+
     }
 
     void ApplyInitialForce()
