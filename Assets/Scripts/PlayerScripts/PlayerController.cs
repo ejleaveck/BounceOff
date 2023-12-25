@@ -4,10 +4,8 @@ public class PlayerController : MonoBehaviour
 {
 
     #region
-    //Status and Flags
-
-
     // Move
+    private PlayerControls inputActions;
     [SerializeField] private float moveSpeed = 50f;
     [SerializeField] private float dragFactor = .85f;
     private Vector2 inputDirection;
@@ -16,105 +14,126 @@ public class PlayerController : MonoBehaviour
     //Move Flags
     bool canMove = false;
 
-    //Special Movements
-    private PlayerRotationController rotationController;
-    private TractorBeamController tractorBeamController;
+
 
     //Power Ups
     //***
-    //Fuel Control
-    private FuelControl fuelControl;
+   
 
-    //***
-    //Pulse
-    bool isPulseFiring = false;
-    bool isPulseAvailable = true;
-
-    [SerializeField] private float pulseMultiplier = 5f;
-    [SerializeField] private float pulseBurnRate = 2f;
 
     //Game Objects
     Rigidbody2D playerRb;
     SpriteRenderer spriteRenderer;
 
+
+    //Outside Scripts
+    private RotatePlayerController rotationController;
+    private TractorBeamController tractorBeamController;
+    private PulseEngineController pulseEngine;
+    private FuelController fuelController;
+
+
+    //For game testing
+    [SerializeField] private float maxFuelLevel = 5f;
+
+    #endregion
+
+    #region //New Input System Methods for adding listeners and Enabling / diabling
+
+    private void OnEnable()
+    {
+        //Player Controls Events
+
+        inputActions.Player.MovePlayer.performed += context => MovePlayer(context.ReadValue<Vector2>());
+        inputActions.Player.MovePlayer.canceled += context => MovePlayer(Vector2.zero);
+
+        inputActions.Player.ControllerXButton.performed += context => TryFiringPulseEngine(true);
+        inputActions.Player.ControllerXButton.canceled += context => TryFiringPulseEngine(false);
+
+        inputActions.Player.ControllerYButton.performed += context => TryUsingTractorBeam(true);
+        inputActions.Player.ControllerYButton.canceled += context => TryUsingTractorBeam(false);
+
+        inputActions.Player.ControllerAButton.performed += context => RotatePlayer(1);
+        inputActions.Player.ControllerAButton.canceled += context => RotatePlayer(0);
+
+        inputActions.Player.ControllerBButton.performed += context => RotatePlayer(-1);
+        inputActions.Player.ControllerBButton.canceled += context => RotatePlayer(0);
+
+
+        inputActions.Enable();
+
+        //Other Actions
+
+    }
+
+    private void OnDisable()
+    {
+        //Disable Player Controls Events
+        inputActions.Player.MovePlayer.performed -= context => MovePlayer(context.ReadValue<Vector2>());
+        inputActions.Player.MovePlayer.canceled -= context => MovePlayer(Vector2.zero);
+
+        inputActions.Player.ControllerXButton.performed -= context => TryFiringPulseEngine(true);
+        inputActions.Player.ControllerXButton.canceled -= context => TryFiringPulseEngine(false);
+
+        inputActions.Player.ControllerYButton.performed -= context => TryUsingTractorBeam(true);
+        inputActions.Player.ControllerYButton.canceled -= context => TryUsingTractorBeam(false);
+
+        inputActions.Player.ControllerAButton.performed -= context => RotatePlayer(1);
+        inputActions.Player.ControllerAButton.canceled -= context => RotatePlayer(0);
+
+        inputActions.Player.ControllerBButton.performed -= context => RotatePlayer(-1);
+        inputActions.Player.ControllerBButton.canceled -= context => RotatePlayer(0);
+
+        inputActions.Disable();
+
+        //Disable Other Actions
+    }
+
     #endregion
 
 
-
-    void Start()
+    private void Awake()
     {
+        inputActions = new PlayerControls();
         //Initialize Game Components
         playerRb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        fuelControl = GetComponent<FuelControl>();
-        rotationController = GetComponent<PlayerRotationController>();
-       tractorBeamController = GetComponentInChildren<TractorBeamController>();
+        fuelController = GetComponent<FuelController>();
+        rotationController = GetComponent<RotatePlayerController>();
+        tractorBeamController = GetComponentInChildren<TractorBeamController>();
+        pulseEngine = GetComponent<PulseEngineController>();
+    }
 
-        tractorBeamController.SetFuelControl(fuelControl);
+    void Start()
+    {
+        //Send any Player attached Scripts down to Child GameObjects
+        tractorBeamController.SetFuelControl(fuelController);
 
 
         //Initialize Player status
-        fuelControl.StartRefuel();
+        fuelController.StartRefuel();
 
 
-        //Initialzie Environment
     }
 
+    private void OnDestroy()
+    {
+        //Future use for any in Game instantiated objects
+    }
 
 
     void Update()
     {
-        //movement input
-        CheckMoveAvailability();
-        if (canMove)
-        {
-            inputDirection.x = Input.GetAxis("Horizontal");
-            inputDirection.y = Input.GetAxis("Vertical");
-            inputDirection.Normalize();
-        }
-
-        //pulse engine input ---- special skill input
-        //Fire3 = X button
-        isPulseFiring = Input.GetButton("Fire3");
-
-
-        //Rotation input
-        //Fire1 = A button  -- Fire2 = B button
-        if (Input.GetButtonDown("Fire1"))
-        {
-            rotationController.TryRotatePlayer(1);
-        }
-        if (Input.GetButtonDown("Fire2"))
-        {
-            rotationController.TryRotatePlayer(-1);
-        }
-
-        //Input button testing
-        // Jump = Y button
-        if (Input.GetButton("Jump"))
-        {
-            tractorBeamController.SetTractorBeamState(true);
-
-            //tractorBeamController.IsTractorBeamOn = true;
-        }
-        else
-        {
-            tractorBeamController.SetTractorBeamState(false);
-
-            //tractorBeamController.IsTractorBeamOn = false;
-        }
-
+        CheckShipFunctionAvailability();
     }
 
 
     private void FixedUpdate()
     {
-
         //incorpate a check in fuelcontrol script.
-        fuelControl.StartRefuel();
+        fuelController.StartRefuel();
 
-
-        if (inputDirection != Vector2.zero)
+        if (inputDirection != Vector2.zero && canMove)
         {
             ApplyMovement();
         }
@@ -125,16 +144,53 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void CheckMoveAvailability()
+    void CheckShipFunctionAvailability()
     {
+        //Save for future environmental effects
+
+        //canMove is specific for environmental effects, not control
         canMove = true;
+
+        //Is Pulse Available is for environmental effects, not fuel level.
+        pulseEngine.IsPulseAvailable = true;
+        tractorBeamController.IsTractorBeamAvailable = true;
+
+        //Currently being set variable used to set in inspector
+        //update as necessary as power ups are integrated.
+        fuelController.MaxFuelLevel = maxFuelLevel;
+
     }
+
+    private void MovePlayer(Vector2 direction)
+    {
+        inputDirection = direction;
+        inputDirection.Normalize();
+    }
+
+    private void RotatePlayer(float direction)
+    {
+        rotationController.TryRotatePlayer(direction);
+    }
+
+    /// <summary>
+    /// Flag to designate if player is pressing pulse button.
+    /// Updates PusleMultiplier property according to Pulse On / Off value.
+    /// </summary>
+    /// <param name="isPlayerTrying">Set in Input Actions Event</param>
+    private void TryFiringPulseEngine(bool isPlayerTryingToFirePulse)
+    {
+       pulseEngine.SetPulseEngineState(isPlayerTryingToFirePulse);
+    }
+
+    private void TryUsingTractorBeam(bool isPlayerTryingToTurnOn)
+    {
+        tractorBeamController.SetTractorBeamState(isPlayerTryingToTurnOn);
+    }
+
 
     void ApplyMovement()
     {
-        moveAmount = inputDirection * moveSpeed * Time.deltaTime;
-
-        FirePulseEngine();
+        moveAmount = inputDirection * moveSpeed * pulseEngine.PulseMultiplier * Time.deltaTime;
 
         Vector2 newPosition = playerRb.position + moveAmount;
         playerRb.MovePosition(newPosition);
@@ -144,17 +200,4 @@ public class PlayerController : MonoBehaviour
     {
         playerRb.velocity *= dragFactor;
     }
-
-
-    void FirePulseEngine()
-    {
-        if (isPulseFiring && isPulseAvailable && fuelControl.CurrentFuelLevel > 0)
-        {
-            fuelControl.ConsumeFuel(pulseBurnRate * Time.deltaTime);
-
-            moveAmount *= pulseMultiplier;
-        }
-
-    }
-
 }

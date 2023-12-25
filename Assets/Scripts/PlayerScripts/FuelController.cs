@@ -1,12 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
-public class FuelControl : MonoBehaviour
+public class FuelController : MonoBehaviour
 {
 
-    [SerializeField] private float maxFuelLevel = 3f;
+    private float maxFuelLevel = 5f;
     [SerializeField] private float refuelTime = 2f;
     [SerializeField] private float currentFuelLevel;
+
     private bool isRefueling;
 
     public float CurrentFuelLevel
@@ -21,6 +22,11 @@ public class FuelControl : MonoBehaviour
         private set { isRefueling = value; }
     }
 
+    public float MaxFuelLevel
+    {
+        get { return maxFuelLevel; }
+        set { maxFuelLevel = value; }
+    }    
 
     public void StartRefuel()
     { 
@@ -31,10 +37,13 @@ public class FuelControl : MonoBehaviour
        
     }
 
-
-    public void ConsumeFuel(float amount)
+    /// <summary>
+    /// Decrements fuel level according to burn rate
+    /// </summary>
+    /// <param name="amount">Fuel BurnRate</param>
+    public void ConsumeFuel(float burnRate)
     {
-        CurrentFuelLevel -= amount;
+        CurrentFuelLevel -= (burnRate *Time.deltaTime);
        
     }
 

@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRotationController : MonoBehaviour
+public class RotatePlayerController : MonoBehaviour
 {
 
     [SerializeField] private float rotationAmount = 22.5f;
     private bool canRotate = true;
 
     
-
+    /// <summary>
+    /// Used for environmental effects control
+    /// </summary>
     public bool CanRotate
     {
         get { return canRotate; }
@@ -21,7 +23,7 @@ public class PlayerRotationController : MonoBehaviour
     {
         if (canRotate)
         {
-            RotatePlayer(direction);
+           RotatePlayer(direction);
         }
     }
 
