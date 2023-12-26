@@ -31,7 +31,7 @@ public class PulseEngineController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isPulseOn && IsPulseAvailable && fuelControl.CurrentFuelLevel > 0f)
+        if (isPulseOn && IsPulseAvailable && !fuelControl.IsFuelTankEmpty)
         {
             fuelControl.ConsumeFuel(pulseBurnRate);
             PulseMultiplier = pulseOnMultiplierDefault;
@@ -40,7 +40,6 @@ public class PulseEngineController : MonoBehaviour
         {
             SetPulseEngineState(false);
             PulseMultiplier = pulseOffMultiplierDefault;
-
         }
     }
 

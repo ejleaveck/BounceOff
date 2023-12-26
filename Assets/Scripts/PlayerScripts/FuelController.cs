@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 public class FuelController : MonoBehaviour
 {
-    [SerializeField] private float currentFuelLevel = 10f;
-    [SerializeField] private float maxFuelLevel = 10f;
+    [SerializeField] private float currentFuelLevel = 5f;
+    [SerializeField] private float maxFuelLevel = 5f;
 
     /// <summary>
     /// 1 = 1 second of fuel per second
@@ -62,10 +63,14 @@ public class FuelController : MonoBehaviour
     }
 
     private void Awake()
-    {        
+    {
         //CurrentFuelLevel = maxFuelLevel;
     }
 
+    private void Start()
+    {
+        NotifyFuelLevelChangeEvent(CurrentFuelLevel);
+    }
 
     private void FixedUpdate()
     {
@@ -88,10 +93,18 @@ public class FuelController : MonoBehaviour
         IsFuelTankEmpty = CurrentFuelLevel <= emptyTankThreshold;
     }
 
+    public static event Action<float, float> OnFuelChanged;
+
+    private void NotifyFuelLevelChangeEvent(float currentFuel)
+    {
+        OnFuelChanged?.Invoke(currentFuel, MaxFuelLevel);
+    }
+
     public void ConsumeFuel(float burnRate)
     {
         isConsumingFuel = true;
         CurrentFuelLevel -= burnRate * Time.deltaTime;
+        NotifyFuelLevelChangeEvent(CurrentFuelLevel);
     }
 
     private void Refuel()
@@ -100,6 +113,7 @@ public class FuelController : MonoBehaviour
         {
             CurrentFuelLevel += RefuelRate * Time.deltaTime;
             CurrentFuelLevel = Mathf.Clamp(currentFuelLevel, 0f, MaxFuelLevel);
+            NotifyFuelLevelChangeEvent(CurrentFuelLevel);
         }
     }
 
