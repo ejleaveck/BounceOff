@@ -13,16 +13,16 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - TractorBeamable
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Scene_Static
+  - Obstacles
+  - Enemy
+  - Debris
+  - PlayerInteractives
+  - PowerUps
   - 
   - 
   - 
