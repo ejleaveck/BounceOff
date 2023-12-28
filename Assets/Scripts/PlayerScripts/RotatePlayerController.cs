@@ -2,14 +2,8 @@ using UnityEngine;
 
 public class RotatePlayerController : MonoBehaviour
 {
-
-    [SerializeField] private float rotationAmount = 45f;
     [SerializeField] private float continousRotationSpeed = 400f;
 
-    /// <summary>
-    /// Set as a user preference, not necessarily a game mechanic.
-    /// </summary>
-    public bool IsRotatingContinously { get; set; }
 
     private float currentRotationDirection;
 
@@ -31,15 +25,15 @@ public class RotatePlayerController : MonoBehaviour
     {
         currentRotationDirection = direction;
 
-        if (!IsRotatingContinously && CanRotate)
-        {
-            transform.Rotate(0, 0, rotationAmount * direction);
-        }
+        //if (!IsRotatingContinously && CanRotate)
+        //{
+        //    transform.Rotate(0, 0, rotationAmount * direction);
+        //}
     }
 
     private void FixedUpdate()
     {
-        if (IsRotatingContinously && currentRotationDirection != 0 && CanRotate)
+        if (currentRotationDirection != 0 && CanRotate)
         {
             playerRb.constraints = RigidbodyConstraints2D.None;
 
@@ -50,11 +44,8 @@ public class RotatePlayerController : MonoBehaviour
 
     public void StopContinuousRotation()
     {
-        if (IsRotatingContinously)
-        {
             currentRotationDirection = 0;
             playerRb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        }
     }
 
     private void ContinousRotation()

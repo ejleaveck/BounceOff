@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GoalObjectController : MonoBehaviour
@@ -16,6 +14,7 @@ public class GoalObjectController : MonoBehaviour
     private void Awake()
     {
         goalObjectRb = GetComponent<Rigidbody2D>();
+        
     }
     // Start is called before the first frame update
     void Start()
@@ -30,6 +29,19 @@ public class GoalObjectController : MonoBehaviour
 
     }
 
+
+    ///<summary>
+    /// Trigger end of level event specific for goalobject level end triggering
+    /// </summary>
+    public void OnEnterDampingDistance()
+    {
+       goalObjectRb.velocity = Vector2.zero;
+
+        //invoke the end level event
+        GameManager.TriggerLevelEnd(GameManager.LevelEndTriggerSource.GoalObject);
+
+    }
+
     void ApplyInitialForce()
     {
         goalObjectRb.AddForce(initialForce, ForceMode2D.Impulse);
@@ -39,7 +51,7 @@ public class GoalObjectController : MonoBehaviour
     {
         float currentSpeed = goalObjectRb.velocity.magnitude;
 
-        if(currentSpeed > maxSpeed)
+        if (currentSpeed > maxSpeed)
         {
             goalObjectRb.velocity = goalObjectRb.velocity.normalized * maxSpeed;
         }

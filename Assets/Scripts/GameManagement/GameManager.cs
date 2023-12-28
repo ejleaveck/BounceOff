@@ -1,44 +1,37 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class GameManager : MonoBehaviour
 {
-    public static event Action<float> GetCurrentGameTime;
-
-    private float gameTime = .02f;
-
     public static GameManager Instance { get; private set; }
+
+    public static event Action<float> GetCurrentGameTime;
+        private float gameTime = .02f;
+
+      public enum LevelEndTriggerSource
+    {
+        StartGame,
+        GoalObject,
+        Goal,
+        WarpZone,
+        PlayerDeath
+    }
+
+    public static event Action<LevelEndTriggerSource> LevelEndTriggered;
 
     private void Awake()
     {
-      if (Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-      else if (Instance!=this)
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
-    }
-
-    public void LoadScene(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-       
     }
 
 
@@ -49,8 +42,31 @@ public class GameManager : MonoBehaviour
         NotifyCurrentGameTime();
     }
 
+
+    /// <summary>
+    /// Call this to invoke the end of level
+    /// </summary>
+    /// <param name="source">The enum of what is causing the end of the level to select proper level end logic</param>
+    public static void TriggerLevelEnd(LevelEndTriggerSource source)
+    {
+        LevelEndTriggered?.Invoke(source);
+    }
+
+    public void OnLevelComplete(int nextSceneIndex)
+    {
+
+        //do level complete stuff before loading next scene that is game wide 
+        //now that game wide game management is handled send over to the scene controller for scene change specific items.
+        SceneController.Instance.LoadNextScene(nextSceneIndex);
+    }
+
+    public void StartMenuStartGameButtonClick()
+    {
+        TriggerLevelEnd(LevelEndTriggerSource.StartGame);
+    }
+
     private void NotifyCurrentGameTime()
     {
- GetCurrentGameTime?.Invoke(gameTime);
+        GetCurrentGameTime?.Invoke(gameTime);
     }
 }

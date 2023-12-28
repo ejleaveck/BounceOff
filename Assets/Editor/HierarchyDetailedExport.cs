@@ -7,7 +7,7 @@ using System.Linq;
 
 public class DetailedHierarchyExporter
 {
-    [MenuItem("EJ's Tools/Export Hierarchy")]
+    [MenuItem("Tools/Export Hierarchy")]
     public static void ExportHierarchy()
     {
         StringBuilder stringBuilder = new StringBuilder();

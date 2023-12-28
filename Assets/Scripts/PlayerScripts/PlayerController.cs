@@ -64,8 +64,6 @@ public class PlayerController : MonoBehaviour
         //Send any Player attached Scripts down to Child GameObjects
         tractorBeamController.SetFuelControl(fuelController);
 
-        //Player Setting / Preference.
-        rotationController.IsRotatingContinously = true;
         
         CheckShipFunctionAvailability();
     }

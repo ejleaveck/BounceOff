@@ -5,7 +5,7 @@ using System.Text;
 
 public class ExportAssetFolderStructure : MonoBehaviour
 {
-    [MenuItem("EJ's Tools/Export Asset Folder Structure")]
+    [MenuItem("Tools/Export Asset Folder Structure")]
     private static void ExportStructure()
     {
         string path = EditorUtility.SaveFilePanel("Save Asset Structure", "", "AssetStructure", "txt");

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6471248145279503838}
   - component: {fileID: 6471248145279503824}
   - component: {fileID: 6471248145279503839}
+  - component: {fileID: -4827766359993311392}
   m_Layer: 6
   m_Name: DebrisStyle1
   m_TagString: Untagged
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 43df80cd04b49bf48a442d9d3f57c572, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -200,3 +201,16 @@ PolygonCollider2D:
       - {x: 0.17999999, y: -0.635}
       - {x: 0.21, y: -0.59499997}
       - {x: 0.21, y: -0.575}
+--- !u!114 &-4827766359993311392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471248145279503826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdefdc5423c5a9d42ba60d844e6cd87d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectMultiplier: 1

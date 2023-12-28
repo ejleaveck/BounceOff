@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TractorBeamController : MonoBehaviour
+public class TractorBeamController : Attachment
 {
     //gravity well
     [SerializeField] private float gravityStrength = 1000f;
@@ -46,6 +46,17 @@ public class TractorBeamController : MonoBehaviour
             fuelControl.StopConsumingFuel();
         }
     }
+
+    public override void Activate()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Deactivate()
+    {
+        throw new System.NotImplementedException();
+    }
+
 
     public void SetTractorBeamButtonState(bool isPressed)
     {
