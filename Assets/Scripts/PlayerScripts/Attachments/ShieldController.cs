@@ -4,14 +4,25 @@ using UnityEngine;
 
 public class ShieldController : Attachment
 {
+    public override string AttachmentName => "Shield";
+    [SerializeField] private float shieldBurnRate;
+    public override float BurnRate => shieldBurnRate;
+
+    private SpriteRenderer spriteRenderer;
+
+    private void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     public override void Activate()
     {
-        throw new System.NotImplementedException();
+        spriteRenderer.enabled = true;
     }
 
     public override void Deactivate()
     {
-        throw new System.NotImplementedException();
+       spriteRenderer.enabled = false;
     }
 }
    

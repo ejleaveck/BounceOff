@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInputHandler inputHandler;
 
+    private AttachmentsController attachmentsController;
+
     #endregion
 
 
@@ -42,12 +44,15 @@ public class PlayerController : MonoBehaviour
         tractorBeamController = GetComponentInChildren<TractorBeamController>();
         pulseEngine = GetComponent<PulseEngineController>();
 
+        attachmentsController = GetComponentInChildren<AttachmentsController>();
+
         inputHandler = GetComponent<PlayerInputHandler>();
+        
+        
         //Event subscriptions for rotation
-
-
         inputHandler.OnRotateButtonPressed += rotationController.TryRotatePlayer;
         inputHandler.OnStopRotateButtonPressed += rotationController.StopContinuousRotation;
+        inputHandler.OnSwitchAttachment += attachmentsController.SwitchAttachment;
     }
 
     private void OnDestroy()
@@ -56,6 +61,8 @@ public class PlayerController : MonoBehaviour
         {
             inputHandler.OnRotateButtonPressed -= rotationController.TryRotatePlayer;
             inputHandler.OnStopRotateButtonPressed -= rotationController.StopContinuousRotation;
+
+            inputHandler.OnSwitchAttachment -= attachmentsController.SwitchAttachment;
         }
     }
 
@@ -64,10 +71,15 @@ public class PlayerController : MonoBehaviour
         //Send any Player attached Scripts down to Child GameObjects
         tractorBeamController.SetFuelControl(fuelController);
 
+       
         
         CheckShipFunctionAvailability();
     }
 
+    private void Update()
+    {
+        attachmentsController.UseCurrentAttachment(inputHandler.IsUsingAttachment);
+    }
 
     private void FixedUpdate()
     {
@@ -83,7 +95,8 @@ public class PlayerController : MonoBehaviour
 
         pulseEngine.SetPulseEngineState(inputHandler.IsFiringPulse);
 
-        tractorBeamController.SetTractorBeamButtonState(inputHandler.IsUsingTractorBeam);
+        //TODO: Outdated event, check that it is correcly handled by attachmentcontroller event for all attachments.
+        //tractorBeamController.SetTractorBeamButtonState(inputHandler.IsUsingAttachment);
     }
 
 

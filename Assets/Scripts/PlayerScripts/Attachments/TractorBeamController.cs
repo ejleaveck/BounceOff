@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class TractorBeamController : Attachment
 {
+
+    public override string AttachmentName => "Tractor Beam";
+    
+
     //gravity well
     [SerializeField] private float gravityStrength = 1000f;
     [SerializeField] private float maxGravityForce = 1000f;
@@ -16,6 +20,7 @@ public class TractorBeamController : Attachment
     //Fuel control 
     private FuelController fuelControl;
     [SerializeField] private float beamBurnRate = 1f;
+    public override float BurnRate => beamBurnRate;
 
     /// <summary>
     /// Set based on environmentals or status, not fuel levels.
@@ -49,35 +54,31 @@ public class TractorBeamController : Attachment
 
     public override void Activate()
     {
-        throw new System.NotImplementedException();
+        isTractorBeamOn = true;
+            tractorBeamRenderer.enabled = true;
     }
 
     public override void Deactivate()
     {
-        throw new System.NotImplementedException();
+        isTractorBeamOn = false;
+            tractorBeamRenderer.enabled = false;
+
     }
 
 
     public void SetTractorBeamButtonState(bool isPressed)
     {
         isTractorBeamButtonPressed = isPressed;
-        UpdateTractorBeamState();
-    }
-
-    private void UpdateTractorBeamState()
-    {
-        if (isTractorBeamButtonPressed && IsTractorBeamAvailable && !fuelControl.IsFuelTankEmpty)
+        if(isTractorBeamButtonPressed && IsTractorBeamAvailable && !fuelControl.IsFuelTankEmpty)
         {
-            isTractorBeamOn = true;
-            tractorBeamRenderer.enabled = true;
+            Activate();
         }
         else
         {
-            isTractorBeamOn = false;
-            tractorBeamRenderer.enabled = false;
+            Deactivate();
         }
-
     }
+
 
     /// <summary>
     /// Receives Fuel Control from Player Object.

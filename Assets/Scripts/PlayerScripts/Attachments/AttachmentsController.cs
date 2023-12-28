@@ -1,44 +1,73 @@
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AttachmentsController : MonoBehaviour
 {
 
-    public enum Attachment
-    {
-        [Description("Tractor Beam")]
-        TractorBeam,
-        [Description("Shield")]
-        Shield,
-        [Description("Laser Blaster")]
-        Laser,
-        [Description("Gravity Well Diffusor")]
-        AntiGravity
-    }
+    public int CurrentAttachmentIndex { get; private set; }
+
+    private Attachment[] attachments;
+
+    public static event Action<Attachment> OnAttachmentSwitched;
 
     private void Start()
     {
-        ChangeAttachment(Attachment.TractorBeam);
+        CurrentAttachmentIndex = 0;
+
+        //initialize the attachments array by getting any attachments that are direct children of Attachments game object.
+      var attachmentsList = new List<Attachment>();
+
+        foreach(Transform child in transform)
+        {
+            var attachment = child.GetComponent<Attachment>();
+            if(attachment != null )
+            {
+                attachmentsList.Add(attachment);
+            }
+        }
+
+        attachments = attachmentsList.ToArray();
+
+        //Deactivate all at start
+        foreach(var attachment in attachments)
+        {
+            attachment.Deactivate();
+        }
+
+        if (attachments.Length > 0)
+        {
+            attachments[CurrentAttachmentIndex].Activate();
+            NotifyAttachmentSwitched();
+        }
+
     }
 
-    /// <summary>
-    /// Future use if I want to build in more descriptive strings of the enums for displaying to the UI.
-    /// Enum Param needs to have [Description("string")] above each enum value in the variable declaration.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public static string GetEnumDescription(Enum value)
+    public void SwitchAttachment()
     {
-        var field = value.GetType().GetField(value.ToString());
-        var attribute = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
-        return attribute == null ? value.ToString() : attribute.Description;
+        attachments[CurrentAttachmentIndex].Deactivate();
+        CurrentAttachmentIndex = (CurrentAttachmentIndex +1) % attachments.Length;
+        attachments[CurrentAttachmentIndex].Activate();
+
+        OnAttachmentSwitched?.Invoke(attachments[CurrentAttachmentIndex]);
     }
 
-    public static event Action<Attachment> AttachmentChanged;
-
-    private void ChangeAttachment(Attachment newAttachment)
+    private void NotifyAttachmentSwitched()
     {
-        AttachmentChanged?.Invoke(newAttachment);
+        OnAttachmentSwitched?.Invoke(attachments[CurrentAttachmentIndex]);
     }
+
+    public void UseCurrentAttachment(bool use)
+    {
+        if(use)
+        {
+            attachments[CurrentAttachmentIndex].Activate();
+        }    
+        else
+        {
+            attachments[CurrentAttachmentIndex].Deactivate();
+        }
+    }
+
 }

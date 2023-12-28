@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
         SceneController.Instance.LoadNextScene(nextSceneIndex);
     }
 
-    public void StartMenuStartGameButtonClick()
+    public void HandleStartGame()
     {
         TriggerLevelEnd(LevelEndTriggerSource.StartGame);
     }

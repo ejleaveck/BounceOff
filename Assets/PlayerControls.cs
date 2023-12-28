@@ -71,6 +71,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchAttachmentButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""cb05982a-5c4f-4634-afe4-7861c7778710"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -208,34 +217,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b91a078f-fc89-40e3-9568-a49f29df3498"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateCounterclockwise"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""d0c61879-0c55-4e06-87fc-4b1d6bfd4788"",
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""RotateCounterclockwise"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5003fea3-3db5-45ca-ae27-82d35366ff91"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateClockwise"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -260,6 +247,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""UseAttachmentButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77355f49-d5e2-4d89-bceb-a20cc14fcb70"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchAttachmentButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -273,6 +271,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_RotateCounterclockwise = m_Player.FindAction("RotateCounterclockwise", throwIfNotFound: true);
         m_Player_RotateClockwise = m_Player.FindAction("RotateClockwise", throwIfNotFound: true);
         m_Player_UseAttachmentButton = m_Player.FindAction("UseAttachmentButton", throwIfNotFound: true);
+        m_Player_SwitchAttachmentButton = m_Player.FindAction("SwitchAttachmentButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -339,6 +338,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RotateCounterclockwise;
     private readonly InputAction m_Player_RotateClockwise;
     private readonly InputAction m_Player_UseAttachmentButton;
+    private readonly InputAction m_Player_SwitchAttachmentButton;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -348,6 +348,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @RotateCounterclockwise => m_Wrapper.m_Player_RotateCounterclockwise;
         public InputAction @RotateClockwise => m_Wrapper.m_Player_RotateClockwise;
         public InputAction @UseAttachmentButton => m_Wrapper.m_Player_UseAttachmentButton;
+        public InputAction @SwitchAttachmentButton => m_Wrapper.m_Player_SwitchAttachmentButton;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -372,6 +373,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @UseAttachmentButton.started += instance.OnUseAttachmentButton;
             @UseAttachmentButton.performed += instance.OnUseAttachmentButton;
             @UseAttachmentButton.canceled += instance.OnUseAttachmentButton;
+            @SwitchAttachmentButton.started += instance.OnSwitchAttachmentButton;
+            @SwitchAttachmentButton.performed += instance.OnSwitchAttachmentButton;
+            @SwitchAttachmentButton.canceled += instance.OnSwitchAttachmentButton;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -391,6 +395,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @UseAttachmentButton.started -= instance.OnUseAttachmentButton;
             @UseAttachmentButton.performed -= instance.OnUseAttachmentButton;
             @UseAttachmentButton.canceled -= instance.OnUseAttachmentButton;
+            @SwitchAttachmentButton.started -= instance.OnSwitchAttachmentButton;
+            @SwitchAttachmentButton.performed -= instance.OnSwitchAttachmentButton;
+            @SwitchAttachmentButton.canceled -= instance.OnSwitchAttachmentButton;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -415,5 +422,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnRotateCounterclockwise(InputAction.CallbackContext context);
         void OnRotateClockwise(InputAction.CallbackContext context);
         void OnUseAttachmentButton(InputAction.CallbackContext context);
+        void OnSwitchAttachmentButton(InputAction.CallbackContext context);
     }
 }

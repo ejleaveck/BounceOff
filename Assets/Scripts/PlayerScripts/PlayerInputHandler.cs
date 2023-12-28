@@ -14,11 +14,13 @@ public class PlayerInputHandler : MonoBehaviour
     }
 
     public bool IsFiringPulse { get; private set; }
-    public bool IsUsingTractorBeam { get; private set; }
+    public bool IsUsingAttachment { get; private set; }
     public float RotationDirection { get; private set; }
 
     public event Action<float> OnRotateButtonPressed;
     public event Action OnStopRotateButtonPressed;
+
+    public event Action OnSwitchAttachment;
 
     private void Awake()
     {
@@ -33,9 +35,11 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.EnginePulseButton.performed += context => IsFiringPulse = true;
         inputActions.Player.EnginePulseButton.canceled += context => IsFiringPulse = false;
 
-        inputActions.Player.UseAttachmentButton.performed += context => IsUsingTractorBeam = true;
-        inputActions.Player.UseAttachmentButton.canceled += context => IsUsingTractorBeam = false;
+        inputActions.Player.UseAttachmentButton.performed += context => IsUsingAttachment = true;
+        inputActions.Player.UseAttachmentButton.canceled += context => IsUsingAttachment = false;
 
+        inputActions.Player.SwitchAttachmentButton.performed += _ => OnSwitchAttachment?.Invoke();
+        
         inputActions.Player.RotateClockwise.performed += _ => OnRotateButtonPressed?.Invoke(-1f);
         inputActions.Player.RotateClockwise.canceled += _ => OnStopRotateButtonPressed?.Invoke();
 

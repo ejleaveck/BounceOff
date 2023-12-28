@@ -18,16 +18,20 @@ public class HUDController : MonoBehaviour
     {
         // Subscribe to events
         FuelController.OnFuelChanged += UpdateFuelDisplay;
-        AttachmentsController.AttachmentChanged += UpdateAttachmentDisplay;
+
+        AttachmentsController.OnAttachmentSwitched += UpdateAttachmentDisplay;
+
         //LevelManager.OnLevelChanged += UpdateLevelDisplay;
         GameManager.GetCurrentGameTime += UpdateTimeDisplay;
     }
+
 
     private void OnDisable()
     {
         // Unsubscribe from events
         FuelController.OnFuelChanged -= UpdateFuelDisplay;
-        AttachmentsController.AttachmentChanged -= UpdateAttachmentDisplay;
+
+        //AttachmentsController.AttachmentChanged -= UpdateAttachmentDisplay;
         //LevelManager.OnLevelChanged -= UpdateLevelDisplay;
         GameManager.GetCurrentGameTime -= UpdateTimeDisplay;
     }
@@ -45,10 +49,10 @@ public class HUDController : MonoBehaviour
         fuelGaugeImage.fillAmount = fillAmount;
     }
 
-    private void UpdateAttachmentDisplay(AttachmentsController.Attachment attachmentName)
+    private void UpdateAttachmentDisplay(Attachment attachment)
     {
-        string description = AttachmentsController.GetEnumDescription(attachmentName);
-        attachmentText.text = $"{description}";
+        string name = attachment.AttachmentName;
+        attachmentText.text = $"{name}";
     }
 
     private void UpdateLevelDisplay(int currentLevel)

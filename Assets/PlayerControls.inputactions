@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchAttachmentButton",
+                    "type": "Button",
+                    "id": "cb05982a-5c4f-4634-afe4-7861c7778710",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -186,34 +195,12 @@
                 },
                 {
                     "name": "",
-                    "id": "b91a078f-fc89-40e3-9568-a49f29df3498",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotateCounterclockwise",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "d0c61879-0c55-4e06-87fc-4b1d6bfd4788",
                     "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "RotateCounterclockwise",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5003fea3-3db5-45ca-ae27-82d35366ff91",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotateClockwise",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -236,6 +223,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "UseAttachmentButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "77355f49-d5e2-4d89-bceb-a20cc14fcb70",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchAttachmentButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
