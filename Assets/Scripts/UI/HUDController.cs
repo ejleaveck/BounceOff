@@ -22,7 +22,7 @@ public class HUDController : MonoBehaviour
         AttachmentsController.OnAttachmentSwitched += UpdateAttachmentDisplay;
 
         //LevelManager.OnLevelChanged += UpdateLevelDisplay;
-        GameManager.GetCurrentGameTime += UpdateTimeDisplay;
+        GameManager.OnGameTimeChange += UpdateTimeDisplay;
     }
 
 
@@ -33,7 +33,7 @@ public class HUDController : MonoBehaviour
 
         //AttachmentsController.AttachmentChanged -= UpdateAttachmentDisplay;
         //LevelManager.OnLevelChanged -= UpdateLevelDisplay;
-        GameManager.GetCurrentGameTime -= UpdateTimeDisplay;
+        GameManager.OnGameTimeChange -= UpdateTimeDisplay;
     }
 
     private void Awake()

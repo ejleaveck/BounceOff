@@ -24,11 +24,6 @@ public class RotatePlayerController : MonoBehaviour
     public void TryRotatePlayer(float direction)
     {
         currentRotationDirection = direction;
-
-        //if (!IsRotatingContinously && CanRotate)
-        //{
-        //    transform.Rotate(0, 0, rotationAmount * direction);
-        //}
     }
 
     private void FixedUpdate()

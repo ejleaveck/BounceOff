@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public static event Action<float> GetCurrentGameTime;
+    public static event Action<float> OnGameTimeChange;
         private float gameTime = .02f;
 
       public enum LevelEndTriggerSource
@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
     }
 
 
+    //TODO: Get this to be in the level controller so it goes straight from source object (goal, warp, etc) to the level controller,
+    //then it can call OnLevelComplete as it does now.
     /// <summary>
     /// Call this to invoke the end of level
     /// </summary>
@@ -52,6 +54,11 @@ public class GameManager : MonoBehaviour
         LevelEndTriggered?.Invoke(source);
     }
 
+
+    /// <summary>
+    /// This is called in sequence of the game end logic after level Controller.
+    /// </summary>
+    /// <param name="nextSceneIndex"></param>
     public void OnLevelComplete(int nextSceneIndex)
     {
 
@@ -67,6 +74,6 @@ public class GameManager : MonoBehaviour
 
     private void NotifyCurrentGameTime()
     {
-        GetCurrentGameTime?.Invoke(gameTime);
+        OnGameTimeChange?.Invoke(gameTime);
     }
 }

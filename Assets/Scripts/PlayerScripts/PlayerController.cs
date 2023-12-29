@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviour
         //Event subscriptions for rotation
         inputHandler.OnRotateButtonPressed += rotationController.TryRotatePlayer;
         inputHandler.OnStopRotateButtonPressed += rotationController.StopContinuousRotation;
+
+
         inputHandler.OnSwitchAttachment += attachmentsController.SwitchAttachment;
     }
 
