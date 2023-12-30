@@ -80,6 +80,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""773faa7b-7434-4037-89a0-1814cc85f206"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -258,6 +267,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""SwitchAttachmentButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30e3a505-7ec1-4fed-878c-0b774662c15c"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -272,6 +292,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_RotateClockwise = m_Player.FindAction("RotateClockwise", throwIfNotFound: true);
         m_Player_UseAttachmentButton = m_Player.FindAction("UseAttachmentButton", throwIfNotFound: true);
         m_Player_SwitchAttachmentButton = m_Player.FindAction("SwitchAttachmentButton", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -339,6 +360,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RotateClockwise;
     private readonly InputAction m_Player_UseAttachmentButton;
     private readonly InputAction m_Player_SwitchAttachmentButton;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -349,6 +371,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @RotateClockwise => m_Wrapper.m_Player_RotateClockwise;
         public InputAction @UseAttachmentButton => m_Wrapper.m_Player_UseAttachmentButton;
         public InputAction @SwitchAttachmentButton => m_Wrapper.m_Player_SwitchAttachmentButton;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -376,6 +399,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @SwitchAttachmentButton.started += instance.OnSwitchAttachmentButton;
             @SwitchAttachmentButton.performed += instance.OnSwitchAttachmentButton;
             @SwitchAttachmentButton.canceled += instance.OnSwitchAttachmentButton;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -398,6 +424,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @SwitchAttachmentButton.started -= instance.OnSwitchAttachmentButton;
             @SwitchAttachmentButton.performed -= instance.OnSwitchAttachmentButton;
             @SwitchAttachmentButton.canceled -= instance.OnSwitchAttachmentButton;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -423,5 +452,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnRotateClockwise(InputAction.CallbackContext context);
         void OnUseAttachmentButton(InputAction.CallbackContext context);
         void OnSwitchAttachmentButton(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

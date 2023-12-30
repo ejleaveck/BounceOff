@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class LevelController : MonoBehaviour
 {
@@ -6,8 +7,9 @@ public class LevelController : MonoBehaviour
     //public static LevelController Instance { get; private set; }
 
     [SerializeField] private SceneData sceneData;
-    private int nextSceneIndex; 
+    private int nextSceneIndex;
 
+    [SerializeField] private PauseMenuController pauseMenuController;
 
     private void OnEnable()
     {
@@ -51,15 +53,11 @@ public class LevelController : MonoBehaviour
         }
     }
 
-
-    private void Awake()
+    public void OnPauseMenuButtonPressed(InputAction.CallbackContext context)
     {
-        //        if (Instance == null)
-        //{
-        //    Instance = this;
-           
-        //}
-       
+        // Do some level controll measures to "Pause" the game and if needed relinquish player controls.
+
+        pauseMenuController.OnPauseMenuButtonPressed(context);
     }
-    
+
 }

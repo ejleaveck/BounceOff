@@ -30,13 +30,14 @@ public class PlayerController : MonoBehaviour
     private PlayerInputHandler inputHandler;
 
     private AttachmentsController attachmentsController;
+    [SerializeField] private LevelController levelController;
 
     #endregion
 
 
     private void Awake()
     {
-            //Initialize Game Components
+        //Initialize Game Components
         playerRb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         fuelController = GetComponent<FuelController>();
@@ -47,15 +48,25 @@ public class PlayerController : MonoBehaviour
         attachmentsController = GetComponentInChildren<AttachmentsController>();
 
         inputHandler = GetComponent<PlayerInputHandler>();
-        
-        
+
+
+
+    }
+
+    private void OnEnable()
+    {
         //Event subscriptions for rotation
         inputHandler.OnRotateButtonPressed += rotationController.TryRotatePlayer;
         inputHandler.OnStopRotateButtonPressed += rotationController.StopContinuousRotation;
 
 
         inputHandler.OnSwitchAttachment += attachmentsController.SwitchAttachment;
+
+        //Game Pause Menu
+        inputHandler.OnMenuButtonPressed += levelController.OnPauseMenuButtonPressed;
+
     }
+
 
     private void OnDestroy()
     {
@@ -65,6 +76,8 @@ public class PlayerController : MonoBehaviour
             inputHandler.OnStopRotateButtonPressed -= rotationController.StopContinuousRotation;
 
             inputHandler.OnSwitchAttachment -= attachmentsController.SwitchAttachment;
+
+            inputHandler.OnMenuButtonPressed -= levelController.OnPauseMenuButtonPressed;
         }
     }
 
@@ -73,8 +86,8 @@ public class PlayerController : MonoBehaviour
         //Send any Player attached Scripts down to Child GameObjects
         tractorBeamController.SetFuelControl(fuelController);
 
-       
-        
+
+
         CheckShipFunctionAvailability();
     }
 

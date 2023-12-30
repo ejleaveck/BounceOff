@@ -46,6 +46,7 @@ public class PulseEngineController : MonoBehaviour
 
     public void SetPulseEngineState(bool isActive)
     {
+        //keep this method incase I want to do something when it turns on or off like a thruster animation.
         isPulseOn = isActive;
     }
 
