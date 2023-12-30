@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Level00-00
   m_EditorClassIdentifier: 
   sceneIndex: 2
-  nextSceneIndex: 3
+  nextSceneIndex: 1
   availablePowerups: []
