@@ -1,11 +1,17 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public PlayerInputHandler inputHandler;
+    public SceneController sceneController;
+    public DataManager dataManager;
+
+    public GameData CurrentGameData {  get; private set; }
 
     public static event Action<float> OnGameTimeChange;
         private float gameTime = .02f;
@@ -26,12 +32,32 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            inputHandler = GetComponent<PlayerInputHandler>();
+            sceneController = GetComponent<SceneController>();
+            dataManager = GetComponent<DataManager>();
+
+            CurrentGameData = new GameData();
+
             DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this)
         {
             Destroy(gameObject);
         }
+
+
+        //TODO: Initiate game loading
+
+        dataManager.LoadInitialGameData();
+
+        
+
+        if(dataManager.initialGameData.savedGameExists)
+        {
+            //TODO: Load GameData, and transfer to CurrentGameData
+        }
+      
+       
     }
 
 
@@ -64,7 +90,7 @@ public class GameManager : MonoBehaviour
 
         //do level complete stuff before loading next scene that is game wide 
         //now that game wide game management is handled send over to the scene controller for scene change specific items.
-        SceneController.Instance.LoadNextScene(nextSceneIndex);
+        Instance.sceneController.LoadNextScene(nextSceneIndex);
     }
 
     public void HandleStartGame()

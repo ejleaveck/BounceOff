@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
 
     #region
     // Move
@@ -27,16 +28,30 @@ public class PlayerController : MonoBehaviour
     private PulseEngineController pulseEngine;
     private FuelController fuelController;
 
-    private PlayerInputHandler inputHandler;
+    [SerializeField] private PlayerInputHandler inputHandler;
 
     private AttachmentsController attachmentsController;
     [SerializeField] private LevelController levelController;
+
+    public Pilot pilot {  get; private set; }
+    public Ship ship { get; private set; }
 
     #endregion
 
 
     private void Awake()
     {
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+
         //Initialize Game Components
         playerRb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -46,11 +61,9 @@ public class PlayerController : MonoBehaviour
         pulseEngine = GetComponent<PulseEngineController>();
 
         attachmentsController = GetComponentInChildren<AttachmentsController>();
-
-        inputHandler = GetComponent<PlayerInputHandler>();
-
-
-
+ 
+        pilot = new Pilot("Rex Starburn", "Experienced Pilot from the milkway galaxy.");
+        ship = new Ship(fuelController, attachmentsController, pilot);
     }
 
     private void OnEnable()
@@ -62,8 +75,7 @@ public class PlayerController : MonoBehaviour
 
         inputHandler.OnSwitchAttachment += attachmentsController.SwitchAttachment;
 
-        //Game Pause Menu
-        inputHandler.OnMenuButtonPressed += levelController.OnPauseMenuButtonPressed;
+
 
     }
 
@@ -77,7 +89,6 @@ public class PlayerController : MonoBehaviour
 
             inputHandler.OnSwitchAttachment -= attachmentsController.SwitchAttachment;
 
-            inputHandler.OnMenuButtonPressed -= levelController.OnPauseMenuButtonPressed;
         }
     }
 

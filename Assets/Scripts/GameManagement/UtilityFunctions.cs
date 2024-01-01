@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UtilityFunctions : MonoBehaviour
+public class UtilityFunctions
 {
-    // Start is called before the first frame update
-    void Start()
+    public static TKey FindKeyByValue<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TValue value)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        foreach (var entry in dictionary)
+        {
+            if (EqualityComparer<TValue>.Default.Equals(entry.Value, value))
+            {
+                return entry.Key;
+            }
+        }
+        return default; // or throw an exception, or indicate failure some other way
     }
 }

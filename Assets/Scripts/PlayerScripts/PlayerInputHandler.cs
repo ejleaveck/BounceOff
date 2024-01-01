@@ -31,7 +31,6 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        //incase something is broken here i changed context to _ on the boolean events.
         inputActions.Player.MovePlayer.performed += context => MovementInput = context.ReadValue<Vector2>();
         inputActions.Player.MovePlayer.canceled += context => MovementInput = Vector2.zero;
 

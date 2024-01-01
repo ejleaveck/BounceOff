@@ -18,7 +18,7 @@ public class TractorBeamController : Attachment
     private SpriteRenderer tractorBeamRenderer;
 
     //Fuel control 
-    private FuelController fuelControl;
+    [SerializeField] private FuelController fuelControl;
     [SerializeField] private float beamBurnRate = 1f;
     public override float BurnRate => beamBurnRate;
 
@@ -30,7 +30,7 @@ public class TractorBeamController : Attachment
     private bool isTractorBeamOn;
     private bool isTractorBeamButtonPressed;
 
-
+   
     // Start is called before the first frame update
     void Start()
     {

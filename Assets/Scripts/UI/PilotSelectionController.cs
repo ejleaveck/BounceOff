@@ -10,25 +10,28 @@ public class PilotSelectionController : MonoBehaviour
 
     private GameObject selectedPFP_Panel = null;
 
-    
+
     void Start()
     {
-        rightPFP_Panel.SetActive(false);
-        leftPFP_Panel.SetActive(false);
+        if (rightPFP_Panel != null || leftPFP_Panel != null)
+        {
+            rightPFP_Panel.SetActive(false);
+            leftPFP_Panel.SetActive(false);
+        }
     }
 
-   public void SelectRightPilot()
+    public void SelectRightPilot()
     {
         rightPFP_Panel.SetActive(true);
         leftPFP_Panel.SetActive(false);
         selectedPFP_Panel = rightPFP_Panel;
-            }
+    }
 
     public void SelectLeftPilot()
     {
         leftPFP_Panel.SetActive(true);
         rightPFP_Panel.SetActive(false);
-        selectedPFP_Panel= leftPFP_Panel;
+        selectedPFP_Panel = leftPFP_Panel;
     }
 
     public void OnLaunchButtonSelected()

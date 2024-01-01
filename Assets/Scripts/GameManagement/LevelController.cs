@@ -1,26 +1,63 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class LevelController : MonoBehaviour
 {
 
-    //public static LevelController Instance { get; private set; }
-
     [SerializeField] private SceneData sceneData;
     private int nextSceneIndex;
+    [SerializeField] private int mainMenuSceneIndex;
 
-    [SerializeField] private PauseMenuController pauseMenuController;
+    [SerializeField] private GameObject attachmentMenu;
+    
+    [SerializeField] private GameObject mainMenu;
+    [SerializeField] private GameObject attachmentMenuDefaultButton;
+    [SerializeField] private GameObject mainMenuDefaultButton;
 
+    [SerializeField] private Transform playerSpawner;
+    
     private void OnEnable()
     {
         GameManager.LevelEndTriggered += HandleLevelEnd;
+
+        //Game Pause Menu
+        GameManager.Instance.inputHandler.OnMenuButtonPressed += OnPauseMenuButtonPressed;
     }
 
     private void OnDisable()
     {
         GameManager.LevelEndTriggered -= HandleLevelEnd;
+        GameManager.Instance.inputHandler.OnMenuButtonPressed -= OnPauseMenuButtonPressed;
     }
 
+    private void Start()
+    {
+        attachmentMenu.SetActive(false);
+
+
+        
+        if (sceneData.sceneIndex == mainMenuSceneIndex)
+        {
+            PlayerController.Instance.gameObject.SetActive(false);
+        }
+        else
+        {
+            //TODO: update this to interact with "player spawning"
+            PlayerController.Instance.gameObject.SetActive(true);
+        }
+
+        MovePlayerToSpawner();
+       
+    }
+
+    private void MovePlayerToSpawner()
+    {
+        if(playerSpawner != null && PlayerController.Instance != null)
+        {
+            PlayerController.Instance.gameObject.transform.position = playerSpawner.position;
+        }
+    }
 
     //TODO: the end level method is in game manager where it is invoking the end level event. then coming here
     //needs to be updated so that when the level ends due to game play, it comes to level controller, and the level controller invokes the
@@ -53,11 +90,31 @@ public class LevelController : MonoBehaviour
         }
     }
 
+
+    bool isattachmentMenuActive;
+
     public void OnPauseMenuButtonPressed(InputAction.CallbackContext context)
     {
-        // Do some level controll measures to "Pause" the game and if needed relinquish player controls.
+        isattachmentMenuActive = attachmentMenu.activeSelf;
 
-        pauseMenuController.OnPauseMenuButtonPressed(context);
+        attachmentMenu.SetActive(!isattachmentMenuActive);
+
+        if (mainMenu != null)
+        {
+            mainMenu.SetActive(isattachmentMenuActive);
+        }
+
+        if (!isattachmentMenuActive)
+        {
+            //Attachment menu is opened:
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(attachmentMenuDefaultButton);
+        }
+        else if(mainMenu !=null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(mainMenuDefaultButton);
+        }
     }
-
+      
 }

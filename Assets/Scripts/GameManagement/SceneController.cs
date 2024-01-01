@@ -4,28 +4,21 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    public static SceneController Instance { get; private set; }
+    //public static SceneController Instance { get; private set; }
 
     private Dictionary<int, string> sceneDictionary = new Dictionary<int, string>();
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            InitializeSceneDictionary();
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
+        InitializeSceneDictionary();
+
     }
 
     private void InitializeSceneDictionary()
     {
+        //TODO: Create a scriptable object to load scene name strings.
         sceneDictionary.Add(1, "A-MainMenu");
-        sceneDictionary.Add(2, "Level00-00");
-        sceneDictionary.Add(3, "Level01-01");
+        sceneDictionary.Add(2, "Level01-01");
     }
 
     public void LoadNextScene(int nextSceneIndex)
